@@ -1,33 +1,32 @@
-import smtpd
-import asyncore
+import asyncio
+from aiosmtpd.controller import Controller
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
 
-class CustomSMTPServer(smtpd.SMTPServer):
-    def process_message(self, peer, mailfrom, rcpttos, data, **kwargs):
-        print('Receiving message from:', peer)
-        print('Message addressed from:', mailfrom
-        )
-        print('Message addressed to  :', rcpttos)
-        print('Message length        :', len(data))
+class CustomSMTPHandler:
+    async def handle_DATA(self, server, session, envelope):
+        # print('Receiving message from:', envelope.mail_from)
+        # print('Message addressed to  :', envelope.rcpt_tos)
+        # print('Message length        :', len(envelope.content))
 
         # Create email message
         subject = "Forwarded Email"
         body = "This is a forwarded email."
 
         msg = MIMEMultipart()
-        msg['From'] = mailfrom
-        msg['To'] = ', '.join(rcpttos)
+        msg['From'] = envelope.mail_from
+        msg['To'] = ', '.join(envelope.rcpt_tos)
         msg['Subject'] = subject
-        msg.attach(MIMEText(data, 'plain'))
+        msg.attach(MIMEText(envelope.content.decode('utf-8'), 'plain'))
 
         # Send email using the send_email method
-        self.send_email(mailfrom, rcpttos, msg.as_string())
-        return
+        await self.send_email(envelope.mail_from, envelope.rcpt_tos, msg.as_string())
 
-    def send_email(self, sender_email, receiver_emails, email_content):
+        return '250 OK'
+
+    async def send_email(self, sender_email, receiver_emails, email_content):
         # Load SMTP server credentials from environment variables for security
         smtp_server = 'mail.bengalintituteoftechnology.online'
         smtp_port = 587
@@ -45,10 +44,12 @@ class CustomSMTPServer(smtpd.SMTPServer):
             print(f"Error: {e}")
 
 if __name__ == '__main__':
-    # Start the custom SMTP server on the specified host and port
-    server = CustomSMTPServer(('0.0.0.0', 1025), None)
+    handler = CustomSMTPHandler()
+    controller = Controller(handler, hostname='0.0.0.0', port=1025)
 
     try:
-        asyncore.loop()
+        controller.start()
+        print("SMTP server started.")
+        asyncio.get_event_loop().run_forever()
     except KeyboardInterrupt:
-        pass
+        controller.stop()

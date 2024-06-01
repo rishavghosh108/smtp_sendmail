@@ -1,4 +1,4 @@
-smtpd
+smtpd == 1.0
 asyncore
 smtplib
 email

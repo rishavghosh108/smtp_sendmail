@@ -29,8 +29,8 @@ class CustomSMTPServer(smtpd.SMTPServer):
 
     def send_email(self, sender_email, receiver_emails, email_content):
         # Load SMTP server credentials from environment variables for security
-        smtp_server = os.getenv('SMTP_SERVER', 'mail.bengalintituteoftechnology.online')
-        smtp_port = int(os.getenv('SMTP_PORT', 587))
+        smtp_server = 'mail.bengalintituteoftechnology.online'
+        smtp_port = 587
         # smtp_username = os.getenv('SMTP_USERNAME', 'your_email@bengalintituteoftechnology.online')
         # smtp_password = os.getenv('SMTP_PASSWORD', 'your_password')
 

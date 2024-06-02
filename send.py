@@ -29,10 +29,9 @@ class CustomSMTPHandler:
     async def send_email(self, sender_email, receiver_emails, email_content):
         smtp_server = 'mail.bengalintituteoftechnology.online'
         smtp_port = 587
-        # smtp_username = os.getenv('SMTP_USERNAME', 'your_email@bengalintituteoftechnology.online')
-        # smtp_password = os.getenv('SMTP_PASSWORD', 'your_password')
 
         try:
+            print(f"Connecting to SMTP server {smtp_server} on port {smtp_port}")
             # server = smtplib.SMTP(smtp_server, smtp_port)
             # server.set_debuglevel(1)  # Enable debug output
             # server.starttls()

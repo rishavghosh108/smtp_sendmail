@@ -34,9 +34,10 @@ class CustomSMTPHandler:
 
         try:
             server = smtplib.SMTP(smtp_server, smtp_port)
-            # server.starttls()
+            server.set_debuglevel(1)  # Enable debug output
+            server.starttls()
             # server.login(smtp_username, smtp_password)
-            # server.sendmail(sender_email, receiver_emails, email_content)
+            server.sendmail(sender_email, receiver_emails, email_content)
             server.quit()
             print("Email sent successfully")
         except Exception as e:

@@ -34,7 +34,7 @@ class CustomSMTPHandler:
 
         try:
             server = smtplib.SMTP(smtp_server, smtp_port)
-            # server.starttls()
+            server.starttls()
             # server.login(smtp_username, smtp_password)
             server.sendmail(sender_email, receiver_emails, email_content)
             server.quit()

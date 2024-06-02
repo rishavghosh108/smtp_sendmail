@@ -27,16 +27,15 @@ class CustomSMTPHandler:
         return '250 OK'
 
     async def send_email(self, sender_email, receiver_emails, email_content):
-        # Load SMTP server credentials from environment variables for security
         smtp_server = 'mail.bengalintituteoftechnology.online'
         smtp_port = 587
-        smtp_username = os.getenv('SMTP_USERNAME', 'your_email@bengalintituteoftechnology.online')
-        smtp_password = os.getenv('SMTP_PASSWORD', 'your_password')
+        # smtp_username = os.getenv('SMTP_USERNAME', 'your_email@bengalintituteoftechnology.online')
+        # smtp_password = os.getenv('SMTP_PASSWORD', 'your_password')
 
         try:
             server = smtplib.SMTP(smtp_server, smtp_port)
             server.starttls()
-            server.login(smtp_username, smtp_password)
+            # server.login(smtp_username, smtp_password)
             server.sendmail(sender_email, receiver_emails, email_content)
             server.quit()
             print("Email sent successfully")

@@ -31,8 +31,7 @@ class CustomSMTPHandler:
         smtp_port = 587
 
         try:
-            print(f"Connecting to SMTP server {smtp_server} on port {smtp_port}")
-            # server = smtplib.SMTP(smtp_server, smtp_port)
+            server = smtplib.SMTP(smtp_server, smtp_port)
             # server.set_debuglevel(1)  # Enable debug output
             # server.starttls()
             # server.login(smtp_username, smtp_password)

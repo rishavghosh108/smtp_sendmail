@@ -7,9 +7,9 @@ import os
 
 class CustomSMTPHandler:
     async def handle_DATA(self, server, session, envelope):
-        # print('Receiving message from:', envelope.mail_from)
-        # print('Message addressed to  :', envelope.rcpt_tos)
-        # print('Message length        :', len(envelope.content))
+        print('Receiving message from:', envelope.mail_from)
+        print('Message addressed to  :', envelope.rcpt_tos)
+        print('Message length        :', len(envelope.content))
 
         # Create email message
         subject = "Forwarded Email"
@@ -45,7 +45,7 @@ class CustomSMTPHandler:
 
 if __name__ == '__main__':
     handler = CustomSMTPHandler()
-    controller = Controller(handler, hostname='0.0.0.0', port=1025)
+    controller = Controller(handler, hostname='0.0.0.0', port=587)
 
     try:
         controller.start()

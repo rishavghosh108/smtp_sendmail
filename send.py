@@ -33,12 +33,12 @@ class CustomSMTPHandler:
         # smtp_password = os.getenv('SMTP_PASSWORD', 'your_password')
 
         try:
-            server = smtplib.SMTP(smtp_server, smtp_port)
-            server.set_debuglevel(1)  # Enable debug output
-            server.starttls()
+            # server = smtplib.SMTP(smtp_server, smtp_port)
+            # server.set_debuglevel(1)  # Enable debug output
+            # server.starttls()
             # server.login(smtp_username, smtp_password)
-            server.sendmail(sender_email, receiver_emails, email_content)
-            server.quit()
+            # server.sendmail(sender_email, receiver_emails, email_content)
+            # server.quit()
             print("Email sent successfully")
         except Exception as e:
             print(f"Error: {e}")

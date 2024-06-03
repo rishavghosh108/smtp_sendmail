@@ -4,11 +4,21 @@ from email.parser import BytesParser
 from email.policy import default
 
 class CustomSMTPHandler:
+    async def handle_CONNECT(self, server, session, envelope, hostname, port):
+        print(f'Connection from {session.peer[0]}')
+        return '220 Welcome'
+
+    async def handle_MAIL(self, server, session, envelope, address, mail_options):
+        print(f'Mail from {address}')
+        return '250 OK'
+
+    async def handle_RCPT(self, server, session, envelope, address, rcpt_options):
+        print(f'Recipient {address}')
+        envelope.rcpt_tos.append(address)
+        return '250 OK'
+
     async def handle_DATA(self, server, session, envelope):
-        print('Receiving message from:', envelope.mail_from)
-        print('Message addressed to  :', envelope.rcpt_tos)
-        print('Message length        :', len(envelope.content))
-        
+        print(f'DATA received')
         # Parse the email content
         email_parser = BytesParser(policy=default)
         email_message = email_parser.parsebytes(envelope.content)
@@ -17,8 +27,8 @@ class CustomSMTPHandler:
         print(f"To: {email_message['To']}")
         print(f"Subject: {email_message['Subject']}")
         print(f"Body:\n{email_message.get_body(preferencelist=('plain', 'html')).get_content()}")
-
-        return '250 OK'
+        
+        return '250 Message accepted for delivery'
 
 async def main():
     handler = CustomSMTPHandler()

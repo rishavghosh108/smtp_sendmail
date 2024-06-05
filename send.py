@@ -1,25 +1,29 @@
-from __future__ import print_function
+import asyncio
+from aiosmtpd.controller import Controller
 from datetime import datetime
-import asyncore
-from smtpd import SMTPServer
 
-class EmlServer(SMTPServer):
+class EmlHandler:
     no = 0
 
-    def process_message(self, peer, mailfrom, rcpttos, data, **kwargs):
+    async def handle_DATA(self, server, session, envelope):
         filename = '%s-%d.eml' % (datetime.now().strftime('%Y%m%d%H%M%S'), self.no)
         with open(filename, 'w') as f:
-            f.write(data)
+            f.write(envelope.content.decode('utf-8'))
         print('%s saved.' % filename)
         self.no += 1
+        return '250 Message accepted for delivery'
 
 def run():
-    # start the smtp server on localhost:25
-    foo = EmlServer(('0.0.0.0', 25), None)
+    handler = EmlHandler()
+    controller = Controller(handler, hostname='0.0.0.0', port=25)
+    controller.start()
+
     try:
-        asyncore.loop()
+        asyncio.get_event_loop().run_forever()
     except KeyboardInterrupt:
         pass
+    finally:
+        controller.stop()
 
 if __name__ == '__main__':
     run()
